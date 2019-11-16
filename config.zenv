@@ -1,0 +1,10 @@
+fooList=(
+        xxx
+        'yy yy'
+        ''
+        'z '
+)
+
+barList=(
+        $appDir/var/tmp
+)
