@@ -41,8 +41,11 @@ appDir=$binDir:h
 # Parse primary options
 # オプションの解析
 
+o_dryrun=() o_quiet=() o_xtrace=() o_help=()
+
 zparseopts -D -K \
            n=o_dryrun -dry-run=o_dryrun \
+           q=o_quiet -quiet=o_quiet \
            x=o_xtrace \
            h=o_help      -help=o_help
 
@@ -53,11 +56,13 @@ if (($#o_xtrace)); then set -x; fi
 # いつも使う関数をここで。(source しても良い)
 
 function x {
-    if (($#o_dryrun)); then
+    if (($#o_dryrun || !$#o_quiet)); then
         print -R '#' ${(q-)argv}
+    fi
+    if (($#o_dryrun)); then
         return;
     fi
-    "$@"
+    "$@" || exit $?
 }
 
 function die { echo 1>&2 $*; exit 1 }
